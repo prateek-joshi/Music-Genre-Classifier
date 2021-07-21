@@ -3,10 +3,10 @@ import librosa
 import math
 import json
 
-os.chdir('/content/Music-Genre-Classification/')
+os.chdir('/content/Music-Genre-Classification/Data/')
 
-DATASET_PATH = 'genres'
-JSON_PATH = 'data.json'
+DATASET_PATH = 'genres_original'
+JSON_PATH = '../data.json'
 SAMPLE_RATE = 22050
 DURATION = 30 # seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
@@ -49,18 +49,20 @@ def save_mfcc(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_length=512, nu
         # process segments, extract mfcc and store data
         for s in range(num_segments):
           start_sample = s * num_samples_per_segment
-          finish_sample = start_sample + num_segments
+          finish_sample = start_sample + num_samples_per_segment
 
           mfcc = librosa.feature.mfcc(
               signal[start_sample:finish_sample], 
-              sr=SAMPLE_RATE, 
+              sr=sr, 
               n_fft=n_fft,
-              hop_length=hop_length
+              hop_length=hop_length,
+              n_mfcc=n_mfcc
           ).T # transpose
 
-          data['mfcc'].append(mfcc.tolist())
-          data['labels'].append(i-1)    # i-1 as we ignored the first itrn
-          print(f'{filepath}, segment: {s+1}')
+          if len(mfcc)==expected_num_mfcc_vectors_per_segment:
+            data['mfcc'].append(mfcc.tolist())
+            data['labels'].append(i-1)    # i-1 as we ignored the first itrn
+            print(f'{filepath}, segment: {s+1}')
 
   with open(JSON_PATH, 'w') as fp:
     json.dump(data, fp, indent=4)
