@@ -3,10 +3,9 @@ import librosa
 import math
 import json
 
-os.chdir('/content/Music-Genre-Classification/Data/')
 
-DATASET_PATH = 'genres_original'
-JSON_PATH = '../data.json'
+DATASET_PATH = os.path.join('Data','genres_original')
+JSON_PATH = 'data.json'
 SAMPLE_RATE = 22050
 DURATION = 30 # seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
@@ -37,7 +36,7 @@ def save_mfcc(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_length=512, nu
     # ensure to be not at the root directory
     if dirpath is not dataset_path:
       # save the label
-      label = dirpath.split('/')[-1]   # genre/blues -> ()
+      label = os.path.split(dirpath)[-1]   # genre/blues -> ()
       data['mapping'].append(label)
       print(f'\nProcessing label {label}...')
 
