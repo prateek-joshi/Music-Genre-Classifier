@@ -4,10 +4,10 @@ import math
 import json
 import argparse
 
-arg = argparse.ArgumentParser(description='Extract mfcc from audio files.')
-arg.add_argument('--data_path', required=True, help='Path to folder containing the sound files.')
-arg.add_argument('--json_path', required=True, help='Save path of generated json file.')
-
+parser = argparse.ArgumentParser(description='Extract mfcc from audio files.')
+parser.add_argument('--data_path', required=True, help='Path to folder containing the sound files.')
+parser.add_argument('--json_path', required=True, help='Save path of generated json file.')
+arg = parser.parse_args()
 
 DATASET_PATH = arg.data_path
 JSON_PATH = arg.json_path
@@ -66,7 +66,7 @@ def save_mfcc(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_length=512, nu
           if len(mfcc)==expected_num_mfcc_vectors_per_segment:
             data['mfcc'].append(mfcc.tolist())
             data['labels'].append(i-1)    # i-1 as we ignored the first itrn
-            print(f'{filepath}, segment: {s+1}')
+            # print(f'{filepath}, segment: {s+1}')
 
   with open(json_path, 'w') as fp:
     json.dump(data, fp, indent=4)
