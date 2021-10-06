@@ -2,10 +2,18 @@ import os
 import librosa
 import math
 import json
+import argparse
+
+arg = argparse.ArgumentParser(description='Extract mfcc from audio files.')
+arg.add_argument('--data_path', required=True, help='Path to folder containing the sound files.')
+arg.add_argument('--json_path', required=False, help='Save path of generated json file.')
 
 
-DATASET_PATH = os.path.join('Data','genres_original')
-JSON_PATH = 'data.json'
+DATASET_PATH = arg.data_path
+if arg.json_path is not None:
+  JSON_PATH = arg.json_path
+else:
+  JSON_PATH = 'data\\data.json'
 SAMPLE_RATE = 22050
 DURATION = 30 # seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
@@ -63,7 +71,7 @@ def save_mfcc(dataset_path, json_path, n_mfcc=13, n_fft=2048, hop_length=512, nu
             data['labels'].append(i-1)    # i-1 as we ignored the first itrn
             print(f'{filepath}, segment: {s+1}')
 
-  with open(JSON_PATH, 'w') as fp:
+  with open(json_path, 'w') as fp:
     json.dump(data, fp, indent=4)
 
 
