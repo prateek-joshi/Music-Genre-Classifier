@@ -6,14 +6,11 @@ import argparse
 
 arg = argparse.ArgumentParser(description='Extract mfcc from audio files.')
 arg.add_argument('--data_path', required=True, help='Path to folder containing the sound files.')
-arg.add_argument('--json_path', required=False, help='Save path of generated json file.')
+arg.add_argument('--json_path', required=True, help='Save path of generated json file.')
 
 
 DATASET_PATH = arg.data_path
-if arg.json_path is not None:
-  JSON_PATH = arg.json_path
-else:
-  JSON_PATH = 'data\\data.json'
+JSON_PATH = arg.json_path
 SAMPLE_RATE = 22050
 DURATION = 30 # seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
